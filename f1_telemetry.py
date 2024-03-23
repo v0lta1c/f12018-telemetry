@@ -68,32 +68,46 @@ participantList = {
 eventDataString = '<4s';
 
 #Misc Stuff
-lapNumber = [0] * 20;		#	Iterator array for laptime
-prevPitStatus = [0] * 20;	#	Stores the previous pitstop status
+lapNumber = [];				#	Iterator array for laptime
+prevPitStatus = [];			#	Stores the previous pitstop status
 numOfParticipants = 0;		#	The total players in the game
 #laptime = 0;
 
 ####################################################
 
 #Final Storage Variables
-f_driverNames = [];			#	Stores the names of the drivers
-f_totalLaptimes = [0] * 20;	#	Stores the total lap time of all drivers
-f_bestLaptimes = [0] * 20; 	#	Stores the best lap time of all drivers
-f_lastLaptimes = [0] * 20; 	#	Stores the last lap time of all players
-f_DNF = [True] * 20;		#	Stores if the driver DNF
-f_DSQ = [False] * 20;		#	Stores the DSQ status of drivers
-f_penalties = [0] * 20;		#	Stores the total penalty time
-f_totalLaps = [0] * 20;		#	Stores the total laps made by the car 
-f_carPosition = [0] * 20;	#	Stores the car's final position
-f_totalPitStops = [0] * 20;	#	Stores the total pitstops for drivers
+f_driverNames = [];		#	Stores the names of the drivers
+f_totalLaptimes = [];	#	Stores the total lap time of all drivers
+f_bestLaptimes = []; 	#	Stores the best lap time of all drivers
+f_lastLaptimes = []; 	#	Stores the last lap time of all players
+f_DNF = [];				#	Stores if the driver DNF
+f_DSQ = [];				#	Stores the DSQ status of drivers
+f_penalties = [];		#	Stores the total penalty time
+f_totalLaps = [];		#	Stores the total laps made by the car 
+f_carPosition = [];		#	Stores the car's final position
+f_totalPitStops = [];	#	Stores the total pitstops for drivers
 
 #####################################################
 
+for i in range(0,20):
+	f_totalLaptimes.append(0);
+	f_bestLaptimes.append(0);
+	f_DNF.append(True);
+	f_DSQ.append(False);
+	f_penalties.append(0);
+	f_totalLaps.append(0);
+	f_carPosition.append(0);
+	f_totalPitStops.append(0);
+	lapNumber.append(0);
+	prevPitStatus.append(0);
+
+#####################################################
 #	Do the final calculations here
 
 def performFinalCalculations():
 
-	finalOutput = [[None for i in range(9)] for j in range(numOfParticipants)];
+	#finalOutput = [[None for i in range(9)] for j in range(numOfParticipants)];
+	finalOutput = [];
 
 	for i in range(0,20):
 
@@ -140,7 +154,9 @@ def performFinalCalculations():
 	##############################################
 
 	for i in range(0,numOfParticipants):
-		finalOutput[i] = {'name':f_driverNames[i].rstrip('\u0000'), 'totalLapTime':f_totalLaptimes[i]*1000000, 'position':f_carPosition[i], 'laps':f_totalLaps[i], 'bestLapTime':f_bestLaptimes[i]*1000000, 'DNF':f_DNF[i], 'DSQ':f_DSQ[i], 'penalties':f_penalties[i] *1000000, 'pitstops':f_totalPitStops[i]};
+
+		if(i < numOfParticipants):
+			finalOutput.append({'name':f_driverNames[i].rstrip('\u0000'), 'totalLapTime':f_totalLaptimes[i]*1000000, 'position':f_carPosition[i], 'laps':f_totalLaps[i], 'bestLapTime':f_bestLaptimes[i]*1000000, 'DNF':f_DNF[i], 'DSQ':f_DSQ[i], 'penalties':f_penalties[i] *1000000, 'pitstops':f_totalPitStops[i]});
 
 	#Sort the info based on car positions
 	finalOutput = sorted(finalOutput, key=lambda x:x['position']);
@@ -234,7 +250,7 @@ while True:
 			laptimeData[i] = struct.unpack(laptimeDataString, data[41*i+21:41*i+62]);
 
 			#	Store te last lap time
-			f_lastLaptimes[i] = laptimeData[i][0];
+			f_lastLaptimes.append(laptimeData[i][0]);
 
 			#Check if the lap changes
 			if(lapNumber[i] < laptimeData[i][9]):
@@ -268,6 +284,9 @@ while True:
 		sessionString = decodeString(eventData[0]);
 		if(sessionString == "SSTA"):
 			print("Session Started!");
+			numOfParticipants = 0;
+			for i in lapNumber:
+				i = 0;
 		if(sessionString == "SEND"):
 			print("Session Complete!");
 			for i in range(0,20):
