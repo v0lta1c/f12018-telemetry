@@ -1,0 +1,222 @@
+[
+    {
+        "name": "V. BOTTAS",
+        "totalLapTime": 0.0,
+        "position": 1,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "K. RÄIKKÖNEN",
+        "totalLapTime": 0.0,
+        "position": 2,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "S. VETTEL",
+        "totalLapTime": 0.0,
+        "position": 3,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "D. RICCIARDO",
+        "totalLapTime": 0.0,
+        "position": 4,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "L. HAMILTON",
+        "totalLapTime": 0.0,
+        "position": 5,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "M. VERSTAPPEN",
+        "totalLapTime": 0.0,
+        "position": 6,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "E. OCON",
+        "totalLapTime": 0.0,
+        "position": 7,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "N. HÜLKENBERG",
+        "totalLapTime": 0.0,
+        "position": 8,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "R. GROSJEAN",
+        "totalLapTime": 0.0,
+        "position": 9,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "C. SAINZ",
+        "totalLapTime": 0.0,
+        "position": 10,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "S. PEREZ",
+        "totalLapTime": 0.0,
+        "position": 11,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "K. MAGNUSSEN",
+        "totalLapTime": 0.0,
+        "position": 12,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "F. ALONSO",
+        "totalLapTime": 0.0,
+        "position": 13,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "S. VANDOORNE",
+        "totalLapTime": 0.0,
+        "position": 14,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "L. STROLL",
+        "totalLapTime": 0.0,
+        "position": 15,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "P. GASLY",
+        "totalLapTime": 0.0,
+        "position": 16,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "B. HARTLEY",
+        "totalLapTime": 0.0,
+        "position": 17,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "S. SIROTKIN",
+        "totalLapTime": 0.0,
+        "position": 18,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "C. LECLERC",
+        "totalLapTime": 0.0,
+        "position": 19,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    },
+    {
+        "name": "M. ERICSSON",
+        "totalLapTime": 0.0,
+        "position": 20,
+        "laps": 0,
+        "bestLapTime": 0.0,
+        "DNF": true,
+        "DSQ": false,
+        "penalties": 0,
+        "pitstops": 0
+    }
+]
