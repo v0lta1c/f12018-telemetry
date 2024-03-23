@@ -53,7 +53,7 @@ sessionDataString = '<BbbB';
 sessionData = [None] * 4;
 
 #Participant Data Stuff
-participantData = [[None] * 6 for i in range(20)];
+participantData = [];
 participantDataString = '<BBBBB48s';
 participantList = {
 	0: "Is AI Controlled?",
@@ -76,7 +76,7 @@ numOfParticipants = 0;		#	The total players in the game
 ####################################################
 
 #Final Storage Variables
-f_driverNames = [None] * 20;#	Stores the names of the drivers
+f_driverNames = [];			#	Stores the names of the drivers
 f_totalLaptimes = [0] * 20;	#	Stores the total lap time of all drivers
 f_bestLaptimes = [0] * 20; 	#	Stores the best lap time of all drivers
 f_lastLaptimes = [0] * 20; 	#	Stores the last lap time of all players
@@ -108,27 +108,34 @@ def performFinalCalculations():
 
 	##############################################
 
-	#Experimental Fix
+	#	BUG FIX: Fixed the number of drivers being outputted on the screen
 
-	for i in f_driverNames:
+	removedDrivers = 0;
+
+	for i in reversed(f_driverNames):
 
 		if(i.rstrip('\u0000') == ""):
 
-			index = f_driverNames.index(i);
+			if(removedDrivers < 20 - numOfParticipants):
+				index = f_driverNames.index(i);
+				del f_driverNames[index];
+				del f_totalLaptimes[index];
+				del f_bestLaptimes[index];
+				del f_lastLaptimes[index];
+				del f_DNF[index];
+				del f_DSQ[index];
+				del f_penalties[index];
+				del	f_totalLaps[index];
+				del	f_carPosition[index];
+				del	f_totalPitStops[index];
+				removedDrivers += 1;
 
-			del f_driverNames[index];
-			del f_totalLaptimes[index];
-			del f_bestLaptimes[index];
-			del f_lastLaptimes[index];
-			del f_DNF[index];
-			del f_DSQ[index];
-			del f_penalties[index];
-			del	f_totalLaps[index];
-			del	f_carPosition[index];
-			del	f_totalPitStops[index];
+	#	DO NOT REMOVE THE LOOP BELOW!!!!
+	#	For some reason the above loop doesn't truncate the drivers table and hence the loop below does it
 
-			print("Empty driver entry removed");
-
+	for i in reversed(f_driverNames):
+		if(i == ''):
+			del f_driverNames[f_driverNames.index(i)];
 
 	##############################################
 
@@ -271,9 +278,13 @@ while True:
 
 	# Participant Data Packet (Driver Names are retrieved)
 	if(m_packetID == 4):
+
 		for i in range(0,20):
-			participantData[i] = struct.unpack(participantDataString, data[53*i+22:53*i+75]);
-			f_driverNames[i] = decodeString(participantData[i][5]);
+			participantData.append(struct.unpack(participantDataString, data[53*i+22:53*i+75]));
+			#f_driverNames[i] = decodeString(participantData[i][5]).rstrip('\u0000');
+
+			# NEW - participant appender
+			f_driverNames.append(decodeString(participantData[i][5]).rstrip('\u0000'));
 			if(f_driverNames[i] == "d00m™ DBaNNHD"):
 				f_driverNames[i] == "Doom";
 
