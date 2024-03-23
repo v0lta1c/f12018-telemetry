@@ -18,7 +18,7 @@ UDP_PORT = 20777;	# Default port for F1 2018
 createJsonFile = True;
 createCSVFile = False;
 
-createStaticFileName = False;
+createStaticFileName = True;
 
 #####################################################
 
@@ -135,7 +135,7 @@ def performFinalCalculations():
 				removedDrivers += 1;
 
 	for i in range(0,20):
-		if(i<20-numOfParticipants):
+		if(i<numOfParticipants):
 			#BUGFIX HOST DNF
 			#print(lapNumber[i], sessionData[3] + 1);
 			if(lapNumber[i] == sessionData[3] + 1):
