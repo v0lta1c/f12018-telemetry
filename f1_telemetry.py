@@ -16,9 +16,9 @@ IP = "127.0.0.1";	# Change IP if needed
 UDP_PORT = 20777;	# Default port for F1 2018
 
 createJsonFile = True;
-createCSVFile = False;
+createCSVFile = True;
 
-createStaticFileName = True;
+createStaticFileName = False;
 
 #####################################################
 
@@ -49,8 +49,8 @@ laptimeList = {
 }
 
 #Session Data Stuff
-sessionDataString = '<BbbB';
-sessionData = [None] * 4;
+sessionDataString = '<BbbBHBb';
+sessionData = [None] * 7;
 
 #Participant Data Stuff
 participantData = [];
@@ -70,8 +70,39 @@ eventDataString = '<4s';
 #Misc Stuff
 lapNumber = [];				#	Iterator array for laptime
 prevPitStatus = [];			#	Stores the previous pitstop status
-numOfParticipants = 0;		#	The total players in the game
+numCars = 0;
 #laptime = 0;
+
+#Track ID's
+trackID = {
+	-1: "Unknown",
+	0: "Melbourne",
+	1: "Paul Ricard",
+	2: "Shanghai",
+	3: "Sakhir",
+	4: "Catalunya",
+	5: "Monaco",
+	6: "Montreal",
+	7: "Silverstone",
+	8: "Hockenheim",
+	9: "Hungaroring",
+	10: "Spa",
+	11: "Monza",
+	12: "Singapore",
+	13: "Suzuka",
+	14: "Abu Dhabi",
+	15: "Texas",
+	16: "Brazil",
+	17: "Austria",
+	18: "Sochi",
+	19: "Mexico",
+	20: "Baku",
+	21: "Sakhir Short",
+	22: "Silverstone Short",
+	23: "Texas Short",
+	24: "Suzuka Short"
+
+}
 
 ####################################################
 
@@ -120,7 +151,7 @@ def performFinalCalculations():
 
 		if(i.rstrip('\u0000') == ""):
 
-			if(removedDrivers < 20 - numOfParticipants):
+			if(removedDrivers < 20 - numCars):
 				index = f_driverNames.index(i);
 				del f_driverNames[index];
 				del f_totalLaptimes[index];
@@ -135,7 +166,7 @@ def performFinalCalculations():
 				removedDrivers += 1;
 
 	for i in range(0,20):
-		if(i<numOfParticipants):
+		if(i<numCars):
 			#BUGFIX HOST DNF
 			#print(lapNumber[i], sessionData[3] + 1);
 			if(lapNumber[i] == sessionData[3] + 1):
@@ -148,22 +179,24 @@ def performFinalCalculations():
 	#	DO NOT REMOVE THE LOOP BELOW!!!!
 	#	For some reason the above loop doesn't truncate the drivers table and hence the loop below does it
 
+	iteratorDriver = 0;
 	for i in reversed(f_driverNames):
 		if(i == ''):
 			del f_driverNames[f_driverNames.index(i)];
 
+
 	##############################################
 
-	for i in range(0,numOfParticipants):
+	for i in range(0,numCars):
 
-		if(i < numOfParticipants):
+		if(i < numCars):
 			finalOutput.append({'name':f_driverNames[i].rstrip('\u0000'), 'totalLapTime':f_totalLaptimes[i]*1000000, 'position':f_carPosition[i], 'laps':f_totalLaps[i], 'bestLapTime':f_bestLaptimes[i]*1000000, 'DNF':f_DNF[i], 'DSQ':f_DSQ[i], 'penalties':f_penalties[i] *1000000, 'pitstops':f_totalPitStops[i]});
 
 	#Sort the info based on car positions
 	finalOutput = sorted(finalOutput, key=lambda x:x['position']);
 
 	#Print everything
-	for i in range(0,numOfParticipants):
+	for i in range(0,numCars):
 		print(finalOutput[i]['name']);
 		print("Laps : ", finalOutput[i]['laps']);
 		print("Position :", finalOutput[i]['position']);
@@ -242,7 +275,7 @@ while True:
 	#	Packet Session Data
 	if(m_packetID == 1):
 
-		sessionData = struct.unpack(sessionDataString, data[21:25]);
+		sessionData = struct.unpack(sessionDataString, data[21:29]);
 
 	# Laptime Data packet (Laptime and relevant information extracted)
 	if(m_packetID == 2):
@@ -285,26 +318,27 @@ while True:
 		sessionString = decodeString(eventData[0]);
 		if(sessionString == "SSTA"):
 			print("Session Started!");
-			numOfParticipants = 0;
 			for i in lapNumber:
 				i = 0;
 		if(sessionString == "SEND"):
 			print("Session Complete!");
-			for i in range(0,20):
-				if(participantData[i][5] and decodeString(participantData[i][5]).rstrip('\u0000') != ""):
-					numOfParticipants += 1;
 
 			performFinalCalculations();
 
 	# Participant Data Packet (Driver Names are retrieved)
 	if(m_packetID == 4):
 
-		for i in range(0,20):
+		participantData = [];
+
+		for i in range(0,20,1):
+			numCars = data[21];
 			participantData.append(struct.unpack(participantDataString, data[53*i+22:53*i+75]));
 			#f_driverNames[i] = decodeString(participantData[i][5]).rstrip('\u0000');
 
 			# NEW - participant appender
-			f_driverNames.append(decodeString(participantData[i][5]).rstrip('\u0000'));
+			if(len(f_driverNames) < numCars):
+				f_driverNames.append(decodeString(participantData[i][5]).rstrip('\u0000'));
+
 			if(f_driverNames[i] == "d00m™ DBaNNHD"):
 				f_driverNames[i] == "Doom";
 
