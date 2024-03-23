@@ -3,6 +3,7 @@ import struct
 import sys
 import json
 import csv
+import os
 
 from operator import itemgetter, attrgetter
 import time
@@ -215,8 +216,11 @@ def performFinalCalculations():
 	#	Create a JSON File if enabled
 	if(createJsonFile):
 
+		directory = "logs";
+		os.makedirs(directory, exist_ok = True);
+
 		fileName = " ";
-		fName = "telemetryData";
+		fName = "logs/telemetryData";
 		fileExtension = ".json";
 		timestr = time.strftime("%Y%m%d-%H%M%S");
 
@@ -232,7 +236,7 @@ def performFinalCalculations():
 	if(createCSVFile):
 
 		fileName = " ";
-		fName = "telemetryData";
+		fName = "logs/telemetryData";
 		fileExtension = ".csv";
 		timestr = time.strftime("%Y%m%d-%H%M%S");
 
