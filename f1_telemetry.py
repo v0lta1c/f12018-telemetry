@@ -18,7 +18,7 @@ UDP_PORT = 20777;	# Default port for F1 2018
 createJsonFile = True;
 createCSVFile = False;
 
-createStaticFileName = True;
+createStaticFileName = False;
 
 #####################################################
 
@@ -109,16 +109,6 @@ def performFinalCalculations():
 	#finalOutput = [[None for i in range(9)] for j in range(numOfParticipants)];
 	finalOutput = [];
 
-	for i in range(0,20):
-
-		#BUGFIX HOST DNF
-		#print(lapNumber[i], sessionData[3] + 1);
-		if(lapNumber[i] == sessionData[3] + 1):
-			f_DNF[i] = False;
-
-		f_totalLaps[i] = lapNumber[i] - 1;
-		f_penalties[i] = laptimeData[i][13];
-		f_carPosition[i] = laptimeData[i][8];
 
 	##############################################
 
@@ -143,6 +133,17 @@ def performFinalCalculations():
 				del	f_carPosition[index];
 				del	f_totalPitStops[index];
 				removedDrivers += 1;
+
+	for i in range(0,20):
+		if(i<20-numOfParticipants):
+			#BUGFIX HOST DNF
+			#print(lapNumber[i], sessionData[3] + 1);
+			if(lapNumber[i] == sessionData[3] + 1):
+				f_DNF[i] = False;
+
+			f_totalLaps[i] = lapNumber[i] - 1;
+			f_penalties[i] = laptimeData[i][13];
+			f_carPosition[i] = laptimeData[i][8];
 
 	#	DO NOT REMOVE THE LOOP BELOW!!!!
 	#	For some reason the above loop doesn't truncate the drivers table and hence the loop below does it
