@@ -343,6 +343,6 @@ while True:
 			if(len(f_driverNames) < numCars):
 				f_driverNames.append(decodeString(participantData[i][5]).rstrip('\u0000'));
 
-			if(f_driverNames[i] == "d00m™ DBaNNHD"):
-				f_driverNames[i] == "Doom";
+			#if(f_driverNames[i] == "d00m™ DBaNNHD"):
+				#f_driverNames[i] == "Doom";
 
