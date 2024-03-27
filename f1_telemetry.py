@@ -1,3 +1,21 @@
+####################################################
+####################################################
+
+## Export Function
+
+## from f1_telemetry import runTelemetryClient
+
+## runTelemetryClient(bool keepRunning)
+##
+## bool keepRunning - 	true : keep client running
+##						false: stop the client
+
+##	Run the function when initially starting the telemetry client
+##	Run the function again with keepRunning false when stopping the client
+
+####################################################
+####################################################
+
 import socket
 import struct
 import sys
