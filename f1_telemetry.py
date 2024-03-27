@@ -72,6 +72,7 @@ eventDataString = '<4s';
 lapNumber = [];				#	Iterator array for laptime
 prevPitStatus = [];			#	Stores the previous pitstop status
 numCars = 0;
+keepRunning = False;		#	Variable that stores the status of execution of the program		
 #laptime = 0;
 
 #Track ID's
@@ -254,95 +255,116 @@ def decodeString(encodedString):
 	decodedString = encodedString.decode('utf-8');
 	return decodedString;
 
+#####################################################
+#####################################################
+
+## Call the code from outside
+## from f1_telemetry import runTelemetryClient
 
 #####################################################
 #####################################################
 
-## INT MAIN()
+def runTelemetryClient(keepRunning):
+	if(keepRunning):
+		startTelemetryClient(keepRunning);
+	else:
+		stopTelemetryClient();
+
+def stopTelemetryClient():
+	keepRunning = False;
+	print("Telemetry Client Stopped!");
 
 #####################################################
 #####################################################
 
-clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM);
-clientSocket.bind((IP,UDP_PORT));
+## MAIN FUNCTION
 
-while True:
-	data, addr = clientSocket.recvfrom(1500); #open the client connection
+#####################################################
+#####################################################
 
-	#separate the Header
-	dataHeader = data[0:18];	#Header size 18 bytes
+def startTelemetryClient(keepRunning):
 
-	#Break the Header into relevant information bits
-	(m_packetFormat, m_packetVersion, m_packetID, m_sessionUID, m_sessionTime, m_frameIdentifier, m_playerCarIndex) = struct.unpack(headerString, dataHeader);
+    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM);
+    clientSocket.bind((IP,UDP_PORT));
+    print("Telemetry Client Started!");
 
+    while keepRunning:
+        data, addr = clientSocket.recvfrom(1500); #open the client connection
 
-	#	Packet Session Data
-	if(m_packetID == 1):
+        #separate the Header
+        dataHeader = data[0:18];	#Header size 18 bytes
 
-		sessionData = struct.unpack(sessionDataString, data[21:29]);
-
-	# Laptime Data packet (Laptime and relevant information extracted)
-	if(m_packetID == 2):
-		#print(data);
-		for i in range(0,20):
-			laptimeData[i] = struct.unpack(laptimeDataString, data[41*i+21:41*i+62]);
-
-			#	Store te last lap time
-			f_lastLaptimes.append(laptimeData[i][0]);
-
-			#Check if the lap changes
-			if(lapNumber[i] < laptimeData[i][9]):
-				f_totalLaptimes[i] += laptimeData[i][0];
-				f_bestLaptimes[i] = laptimeData[i][2];
-				lapNumber[i] += 1;
-
-			#Check for DNF and DSQ Statuses
-			for i in range(0,20):
-
-				#DNF Status
-				if(laptimeData[i][16] == 3):
-					f_DNF[i] = False;
-				#DSQ StatusC
-				if(laptimeData[i][16] == 4):
-					f_DSQ[i] = True;
-
-			for i in range(0,20):
-
-				#Check pitstop status
-				if(laptimeData[i][10] and laptimeData[i][10] != 0 and prevPitStatus[i] == 0):
-					f_totalPitStops[i] += 1;
-					prevPitStatus[i] = laptimeData[i][10];
+        #Break the Header into relevant information bits
+        (m_packetFormat, m_packetVersion, m_packetID, m_sessionUID, m_sessionTime, m_frameIdentifier, m_playerCarIndex) = struct.unpack(headerString, dataHeader);
 
 
+        #	Packet Session Data
+        if(m_packetID == 1):
 
-	# Event Data Packet (where samples are taken)
-	if(m_packetID == 3):
-		print("Event Data Packet Received");
-		eventData = struct.unpack(eventDataString, data[21:25]);
-		sessionString = decodeString(eventData[0]);
-		if(sessionString == "SSTA"):
-			print("Session Started!");
-			for i in lapNumber:
-				i = 0;
-		if(sessionString == "SEND"):
-			print("Session Complete!");
+            sessionData = struct.unpack(sessionDataString, data[21:29]);
 
-			performFinalCalculations();
+        # Laptime Data packet (Laptime and relevant information extracted)
+        if(m_packetID == 2):
+            #print(data);
+            for i in range(0,20):
+                laptimeData[i] = struct.unpack(laptimeDataString, data[41*i+21:41*i+62]);
 
-	# Participant Data Packet (Driver Names are retrieved)
-	if(m_packetID == 4):
+                #	Store te last lap time
+                f_lastLaptimes.append(laptimeData[i][0]);
 
-		participantData = [];
+                #Check if the lap changes
+                if(lapNumber[i] < laptimeData[i][9]):
+                    f_totalLaptimes[i] += laptimeData[i][0];
+                    f_bestLaptimes[i] = laptimeData[i][2];
+                    lapNumber[i] += 1;
 
-		for i in range(0,20,1):
-			numCars = data[21];
-			participantData.append(struct.unpack(participantDataString, data[53*i+22:53*i+75]));
-			#f_driverNames[i] = decodeString(participantData[i][5]).rstrip('\u0000');
+                #Check for DNF and DSQ Statuses
+                for i in range(0,20):
 
-			# NEW - participant appender
-			if(len(f_driverNames) < numCars):
-				f_driverNames.append(decodeString(participantData[i][5]).rstrip('\u0000'));
+                    #DNF Status
+                    if(laptimeData[i][16] == 3):
+                        f_DNF[i] = False;
+                    #DSQ StatusC
+                    if(laptimeData[i][16] == 4):
+                        f_DSQ[i] = True;
 
-			#if(f_driverNames[i] == "d00m™ DBaNNHD"):
-				#f_driverNames[i] == "Doom";
+                for i in range(0,20):
+
+                    #Check pitstop status
+                    if(laptimeData[i][10] and laptimeData[i][10] != 0 and prevPitStatus[i] == 0):
+                        f_totalPitStops[i] += 1;
+                        prevPitStatus[i] = laptimeData[i][10];
+
+
+
+        # Event Data Packet (where samples are taken)
+        if(m_packetID == 3):
+            print("Event Data Packet Received");
+            eventData = struct.unpack(eventDataString, data[21:25]);
+            sessionString = decodeString(eventData[0]);
+            if(sessionString == "SSTA"):
+                print("Session Started!");
+                for i in lapNumber:
+                    i = 0;
+            if(sessionString == "SEND"):
+                print("Session Complete!");
+
+                performFinalCalculations();
+
+        # Participant Data Packet (Driver Names are retrieved)
+        if(m_packetID == 4):
+
+            participantData = [];
+
+            for i in range(0,20,1):
+                numCars = data[21];
+                participantData.append(struct.unpack(participantDataString, data[53*i+22:53*i+75]));
+                #f_driverNames[i] = decodeString(participantData[i][5]).rstrip('\u0000');
+
+                # NEW - participant appender
+                if(len(f_driverNames) < numCars):
+                    f_driverNames.append(decodeString(participantData[i][5]).rstrip('\u0000'));
+
+                #if(f_driverNames[i] == "d00m™ DBaNNHD"):
+                    #f_driverNames[i] == "Doom";
 
